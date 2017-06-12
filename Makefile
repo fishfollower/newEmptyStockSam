@@ -16,7 +16,7 @@ $(BD)/data.RData: $(SD)/datascript.R $(datafiles)
 	echo 'source("$(SD)/datascript.R")' | $(useR) 1> $(LD)/data.out 2> $(LD)/data.err
 
 model: $(BD)/model.RData
-$(BD)/model.RData: $(SD)/model.R $(BD)/data.RData 
+$(BD)/model.RData: $(SD)/model.R $(BD)/data.RData $(CF)/model.cfg 
 	echo 'source("$(SD)/model.R")' | $(useR) 1> $(LD)/model.out 2> $(LD)/model.err
 	rm -f $(BD)/leaveout.RData $(BD)/retro.RData $(BD)/forecast.RData $(BD)/residuals.RData
 
