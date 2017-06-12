@@ -6,6 +6,7 @@ DD = data
 CF = conf
 LD = log
 datafiles := $(wildcard $(DD)/*.dat)
+sourcefiles := $(wildcard $(SD)/*)
 BASE = baserun
 
 .PHONY = data model plot justplot sim leaveout retro forecast updatabase button
