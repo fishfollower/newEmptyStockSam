@@ -50,6 +50,14 @@ $(BASE)/model.RData: $(BD)/model.RData justplot
 	rm -f $(BASE)/*
 	cp $(BD)/model.RData $(BASE)
 
+checkalldata: $(LD)/checkdata.tab
+$(LD)/checkdata.tab: $(datafiles) $(SD)/datavalidator.R 
+	echo 'source("$(SD)/datavalidator.R"); write.table(check.all("$(DD)"),sep="|",file="$(LD)/checkdata.tab",eol="\r\n")' | R --slave --vanilla 1> $(LD)/data.out 2> $(LD)/data.err
+
+checkallsource: $(LD)/checksource.tab
+$(LD)/checksource.tab: $(sourcefiles) $(SD)/sourcevalidator.R 
+	echo 'source("$(SD)/sourcevalidator.R"); write.table(check.all.source("$(SD)"),sep="|",file="$(LD)/checksource.tab",eol="\r\n")' | R --slave --vanilla 1> $(LD)/source.out 2> $(LD)/source.err
+
 button: 
 	@echo Upgrade to baserun\; updatebase\; use current run as new baserun
 	@echo Add leave-one-out runs\; leaveout\; Add leave-one-out runs based on the current model 
