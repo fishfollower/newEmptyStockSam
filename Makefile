@@ -15,6 +15,10 @@ data: $(BD)/data.RData
 $(BD)/data.RData: $(SD)/datascript.R $(datafiles) 
 	echo 'source("$(SD)/datascript.R")' | $(useR) 1> $(LD)/data.out 2> $(LD)/data.err
 
+defcon: $(CF)/model.cfg 
+$(CF)/model.cfg: $(BD)/data.RData
+	echo 'library(stockassessment); load("$(BD)/data.RData"); saveConf(defcon(dat),"$(CF)/model.cfg") ' | $(useR) 1> $(LD)/conf.out 2> $(LD)/conf.err
+
 model: $(BD)/model.RData
 $(BD)/model.RData: $(SD)/model.R $(BD)/data.RData $(CF)/model.cfg 
 	echo 'source("$(SD)/model.R")' | $(useR) 1> $(LD)/model.out 2> $(LD)/model.err
