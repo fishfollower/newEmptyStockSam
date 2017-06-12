@@ -120,7 +120,7 @@ check.all<-function(path,filen=c('cn.dat','cw.dat','lw.dat','dw.dat','lf.dat',
     catch.no<-read.ices('cn.dat')
     ageRangeCatch<-getAgeRange(catch.no)
     yearRangeCatch<-getYearRange(catch.no)
-    surveys<- read.surveys('survey.dat')
+    surveys<- read.ices('survey.dat')
     ageRangeSur<-do.call(range,lapply(surveys,getAgeRange))
     yearRangeSur<-do.call(range,lapply(surveys,getYearRange))
     ageRangeTotal<-range(c(ageRangeCatch,ageRangeSur))
