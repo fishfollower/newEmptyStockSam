@@ -69,3 +69,6 @@ button:
 	@echo Add retro runs\; retro\; Add retrospective runs based on the current model 
 	@echo Add forecasts\; forecast\; Add forecast runs to the output
 	@echo Add residuals\; sim\; Add prediction and single joint sample residuals 
+
+getR: 
+	@echo $(useR)
