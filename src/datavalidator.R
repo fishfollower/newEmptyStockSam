@@ -319,3 +319,42 @@ check.all<-function(path,filen=c('cn.dat','cw.dat','lw.dat','dw.dat','lf.dat',
 }
 
 
+gen.default<-function(x,outfile){
+  if(!file.exists('cn.dat')){
+    stop("File cn.dat does not exsist")
+  }
+  if(!file.exists('survey.dat')){
+    stop("File survey.dat does not exsist")
+  }
+  s<-read.surveys('survey.dat')
+  cn<-read.ices('cn.dat')
+  # calculate overall age range 
+  ager<-range(as.vector(unlist(lapply(s, function(m)as.numeric(colnames(m))))),as.numeric(colnames(cn)))
+  # calculate overall year range 
+  yearr<-range(as.vector(unlist(lapply(s, function(m)as.numeric(rownames(m))))),as.numeric(rownames(cn)))
+  mat<-matrix(x,nrow=yearr[2]-yearr[1]+1,ncol=ager[2]-ager[1]+1)
+  cat("Auto generated default file\n1 1\n",file=outfile)
+  cat(yearr,"\n",file=outfile, append=TRUE)
+  cat(ager,"\n",file=outfile, append=TRUE)
+  cat(1,"\n",file=outfile, append=TRUE)
+  write.table(mat,file=outfile, append=TRUE, row.names=FALSE, col.names=FALSE, quote=FALSE)
+}
+
+
+
+gen.default.catchdim<-function(x,outfile){
+  if(!file.exists('cn.dat')){
+    stop("File cn.dat does not exsist")
+  }
+  cn<-read.ices('cn.dat')
+  # calculate overall age range 
+  ager<-range(as.numeric(colnames(cn)))
+  # calculate overall year range 
+  yearr<-range(as.numeric(rownames(cn)))
+  mat<-matrix(x,nrow=yearr[2]-yearr[1]+1,ncol=ager[2]-ager[1]+1)
+  cat("Auto generated default file\n1 1\n",file=outfile)
+  cat(yearr,"\n",file=outfile, append=TRUE)
+  cat(ager,"\n",file=outfile, append=TRUE)
+  cat(1,"\n",file=outfile, append=TRUE)
+  write.table(mat,file=outfile, append=TRUE, row.names=FALSE, col.names=FALSE, quote=FALSE)
+}
