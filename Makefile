@@ -5,11 +5,12 @@ SD = src
 DD = data
 CF = conf
 LD = log
+plotit = echo 'source("$(SD)/plotscript.R")' | $(useR) 1> $(LD)/plot.out 2> $(LD)/plot.err; touch $(RD)/plotOK
 datafiles := $(wildcard $(DD)/*.dat)
 sourcefiles := $(wildcard $(SD)/*)
 BASE = baserun
 
-.PHONY = data model plot justplot sim leaveout retro forecast updatabase button
+.PHONY = data model plot sim leaveout retro forecast updatabase button
 
 data: $(BD)/data.RData  
 $(BD)/data.RData: $(SD)/datascript.R $(datafiles) 
@@ -26,34 +27,33 @@ $(BD)/model.RData: $(SD)/model.R $(BD)/data.RData $(CF)/model.cfg
 
 plot: $(RD)/plotOK
 $(RD)/plotOK: $(BD)/model.RData $(SD)/plotscript.R 
-	echo 'source("$(SD)/plotscript.R")' | $(useR) 1> $(LD)/plot.out 2> $(LD)/plot.err
-	touch $(RD)/plotOK
+	$(plotit)
 
-justplot: 
-	echo 'source("$(SD)/plotscript.R")' | $(useR) 1> $(LD)/plot.out 2> $(LD)/plot.err
-	touch $(RD)/plotOK
-
-sim: $(BD)/residuals.RData justplot
+sim: $(BD)/residuals.RData
 $(BD)/residuals.RData: $(BD)/model.RData $(SD)/residuals.R
 	echo 'source("$(SD)/residuals.R")' | $(useR) 1> $(LD)/res.out 2> $(LD)/res.err
+	$(plotit)
 
-leaveout: $(BD)/leaveout.RData justplot
+leaveout: $(BD)/leaveout.RData
 $(BD)/leaveout.RData: $(BD)/model.RData $(SD)/leaveout.R
 	echo 'source("$(SD)/leaveout.R")' | $(useR) 1> $(LD)/lo.out 2> $(LD)/lo.err
+	$(plotit)
 
-retro: $(BD)/retro.RData justplot
+retro: $(BD)/retro.RData
 $(BD)/retro.RData: $(BD)/model.RData $(SD)/retro.R
 	echo 'source("$(SD)/retro.R")' | $(useR) 1> $(LD)/retro.out 2> $(LD)/retro.err
+	$(plotit)
 
-forecast: $(BD)/forecast.RData justplot
+forecast: $(BD)/forecast.RData
 $(BD)/forecast.RData: $(BD)/model.RData $(SD)/forecast.R
 	echo 'source("$(SD)/forecast.R")' | $(useR) 1> $(LD)/model.out 2> $(LD)/model.err
+	$(plotit)
 
 updatebase: $(BASE)/model.RData
-
-$(BASE)/model.RData: $(BD)/model.RData justplot
+$(BASE)/model.RData: $(BD)/model.RData
 	rm -f $(BASE)/*
 	cp $(BD)/model.RData $(BASE)
+	$(plotit)
 
 checkalldata: $(LD)/checkdata.tab
 $(LD)/checkdata.tab: $(datafiles) $(SD)/datavalidator.R 
