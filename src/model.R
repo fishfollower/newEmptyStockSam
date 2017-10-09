@@ -4,5 +4,6 @@ load("data.RData")
 conf<-loadConf(dat,"../conf/model.cfg")
 par<-defpar(dat,conf)
 fit<-sam.fit(dat,conf,par)
-
 save(fit, file="model.RData")
+cat("Version:",attr(fit,"Version"),"\n", file="ver")
+cat("RemoteSha:", attr(fit,"RemoteSha"),"\n", file="ver", append=TRUE)
