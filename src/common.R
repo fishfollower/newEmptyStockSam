@@ -55,12 +55,25 @@ dummyplot<-function(text='This plot is intentionally left blank'){
   text(.5,.5,labels=text)
 }
 
-stampit<-function() {
-  x<-system('svn info', intern=TRUE)
+tryCatch.W.E <- function(expr){ # function from demo(tryCatch)
+    W <- NULL
+    w.handler <- function(w){ # warning handler
+	W <<- w
+	invokeRestart("muffleWarning")
+    }
+    list(value = withCallingHandlers(tryCatch(expr, error = function(e) e),
+				     warning = w.handler),
+	 warning = W)
+}
+
+stampit<-function(fit) {
+  x<-""  
+  eee<-tryCatch.W.E(x<-system('svn info', intern=TRUE, ignore.stderr=TRUE))
   udir<-sub('/datadisk/stockassessment/userdirs/','',getwd())
   udir<-sub('user[[:digit:]]+/','',udir)
   udir<-sub('/res','',udir)
-  txt<-paste("stockassessment.org",udir,sub("Revision: ", "r",x[grep("Revision",x)]), sep=', ')
+  txt<-paste("stockassessment.org",udir,sub("Revision: ", "r", x[grep("Revision",x)]), sep=', ')
+  txt<-paste0(txt, " , git: ", attr(fit,"RemoteSha"))
   ## Function modified from Frank Harrell's Hmisc library 
   stamp <- function(string = "", print = TRUE, plot = TRUE) {
     opar <- par(yaxt = "s", xaxt = "s", xpd = NA)

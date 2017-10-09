@@ -32,31 +32,31 @@ plots<-function(){
     fits <- c(fit,basefit)
     
     ssbplot(fits, addCI=TRUE)
-    stampit()
+    stampit(fit)
     setcap("Spawning stock biomass", "Spawning stock biomass. 
             Estimates from the current run and point wise 95% confidence 
             intervals are shown by black line and shaded area.")
     
     fbarplot(fits, addCI=TRUE)
-    stampit()
+    stampit(fit)
 
     recplot(fits, addCI=TRUE, las=0)
 
-    stampit()
+    stampit(fit)
 
     catchplot(fits, addCI=TRUE)
-    stampit()
+    stampit(fit)
     
     plot(ypr(fit, aveYears = 20))
-    stampit()
+    stampit(fit)
     
     obscorrplot(fit)
-    stampit()
+    stampit(fit)
 
     
     for(f in 1:fit$data$noFleets){
       fitplot(fit, fleets=f)
-      stampit()
+      stampit(fit)
     }
     
     
@@ -69,14 +69,14 @@ plots<-function(){
     #ages<-fit$conf$minAge:fit$conf$maxAge
     #matplot(ages, exp(t(matrix(FF(key), nrow=5))), type="l", lwd=5, lty="solid", xlab="Ages", ylab="Q")
     #legend("topright", lwd=5, col=2:5, legend=attr(fit$data, "fleetNames")[2:5])
-    #stampit()
+    #stampit(fit)
 
   }  
   
   if(exists("RES")){  
     plot(RES)
     par(mfrow=c(1,1))
-    stampit()
+    stampit(fit)
   
   }
   
@@ -84,40 +84,40 @@ plots<-function(){
   if(exists("RESP")){  
     plot(RESP)
     par(mfrow=c(1,1))
-    stampit()
+    stampit(fit)
   } 
  
   
   if(exists("LO")){  
     ssbplot(LO)
-    stampit()
+    stampit(fit)
     
     fbarplot(LO)
-    stampit()
+    stampit(fit)
 
     recplot(LO)
-    stampit()
+    stampit(fit)
 
     catchplot(LO)
-    stampit()
+    stampit(fit)
     
   } 
   
   if(exists("RETRO")){  
     ssbplot(RETRO, las=0, drop=1)
-    stampit()
+    stampit(fit)
     
     fbarplot(RETRO, las=0, drop=1)
-    stampit()
+    stampit(fit)
     
     recplot(RETRO, las=0, drop=1)
-    stampit()
+    stampit(fit)
 
     catchplot(RETRO)
-    stampit()
+    stampit(fit)
   } 
   if(exists("FC")){  
-    lapply(FC, function(f){plot(f); title(attr(f,"label"), outer=TRUE, line=-1); stampit()})
+    lapply(FC, function(f){plot(f); title(attr(f,"label"), outer=TRUE, line=-1); stampit(fit)})
   }  
   
 }
