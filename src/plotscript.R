@@ -39,16 +39,30 @@ plots<-function(){
     
     fbarplot(fits, addCI=TRUE)
     stampit(fit)
+    setcap("Average fishing mortality", "Average fishing mortality for the shown age range. 
+            Estimates from the current run and point wise 95% confidence 
+            intervals are shown by black line and shaded area.")
 
     recplot(fits, addCI=TRUE, las=0)
-
     stampit(fit)
+    setcap("Recruitment", "Yearly resruitment. 
+        Estimates from the current run and point wise 95% confidence 
+        intervals are shown by black line and shaded area.")
 
     catchplot(fits, addCI=TRUE)
     stampit(fit)
-    
-    plot(ypr(fit, aveYears = 20))
+    setcap("Catch", "Total catch in weight. 
+        Prediction from the current run and point wise 95% confidence 
+        intervals are shown by black line and shaded area. The yearly
+        observed total catch weight (crosses) are calculated as Cy=sum(WayCay).")
+
+    srplot(fit)
     stampit(fit)
+    setcap("Spawner-resruits", "Estimated recruitment as a function of spawning stock biomass.")
+
+    plot(ypr(fit))
+    stampit(fit)
+    setcap("Yield per Recruit", "Yield per recruit (solid line) and spawning stock biomass plotted against different levels of fishing")
     
     obscorrplot(fit)
     stampit(fit)

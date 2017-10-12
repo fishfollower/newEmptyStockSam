@@ -1,4 +1,4 @@
-useR = Rnewest --vanilla --slave
+useR = R --vanilla --slave
 BD = run
 RD = res
 SD = src
