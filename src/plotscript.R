@@ -64,12 +64,14 @@ plots<-function(){
     stampit(fit)
     setcap("Yield per Recruit", "Yield per recruit (solid line) and spawning stock biomass plotted against different levels of fishing")
     
-    obscorrplot(fit)
+    corplot(fit)
+    setcap("Estimated correlations", "Estimates correlations between age groups for each fleet")
     stampit(fit)
 
     
     for(f in 1:fit$data$noFleets){
       fitplot(fit, fleets=f)
+      setcap("Fit to data", "Predicted line and observed points (log scale)")
       stampit(fit)
     }
     
@@ -89,45 +91,54 @@ plots<-function(){
   
   if(exists("RES")){  
     plot(RES)
-    par(mfrow=c(1,1))
+    setcap("One-observation-ahead residuals", "Standardized one-observation-ahead residuals.")
     stampit(fit)
-  
+    par(mfrow=c(1,1))
   }
   
    
   if(exists("RESP")){  
     plot(RESP)
-    par(mfrow=c(1,1))
+    setcap("Process residuals", "Standardized single-joint-sample residuals of process increments")
     stampit(fit)
+    par(mfrow=c(1,1))
   } 
  
   
   if(exists("LO")){  
     ssbplot(LO)
+    setcap("Leaveout (SSB)", "")
     stampit(fit)
     
     fbarplot(LO)
+    setcap("Leaveout (Average F)", "")
     stampit(fit)
 
     recplot(LO)
+    setcap("Leaveout (Recruitment)", "")
     stampit(fit)
 
     catchplot(LO)
+    setcap("Leaveout (Catch)", "")
     stampit(fit)
     
   } 
   
   if(exists("RETRO")){  
     ssbplot(RETRO, las=0, drop=1)
+    setcap("Retrospective (SSB)", "")
     stampit(fit)
     
     fbarplot(RETRO, las=0, drop=1)
+    setcap("Retrospective (Average F)", "")
     stampit(fit)
     
     recplot(RETRO, las=0, drop=1)
+    setcap("Retrospective (Recruitment)", "")
     stampit(fit)
 
     catchplot(RETRO)
+    setcap("Retrospective (Catch)", "")
     stampit(fit)
   } 
   if(exists("FC")){  
