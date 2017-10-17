@@ -206,7 +206,7 @@ sdState<-function(fit, y=max(fit$data$years)-1:0){
   return(ret)
 }
 
-sdtab<-sdState(fit)
+sdtab <- sdState(fit)
 xtab(sdtab, caption=paste('Table 6. Table of selected sd','.',sep=''), cornername='Year', 
      file=paste(stamp,'_tab6.html',sep=''), dec=rep(3,ncol(sdtab)))
 
