@@ -70,5 +70,9 @@ button:
 	@echo Add forecasts\; forecast\; Add forecast runs to the output
 	@echo Add residuals\; sim\; Add prediction and single joint sample residuals 
 
+doclink: 
+	@echo Functions\; https://github.com/fishfollower/SAM/blob/master/docs/index.md \; Documentation for all functions
+	@echo Reference\; http://www.sciencedirect.com/science/article/pii/S0165783614000228 \; Paper describing model 	
+
 getR: 
 	@echo $(useR)
