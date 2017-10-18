@@ -72,7 +72,9 @@ button:
 
 doclink: 
 	@echo Functions\; https://github.com/fishfollower/SAM/blob/master/docs/index.md \; Documentation for all functions
-	@echo Reference\; http://www.sciencedirect.com/science/article/pii/S0165783614000228 \; Paper describing model 	
 
 getR: 
 	@echo $(useR)
+
+getPackageVersion:
+	echo 'packageVersion("stockassessment");' | $(useR)
