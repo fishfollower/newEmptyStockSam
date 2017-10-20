@@ -77,4 +77,5 @@ getR:
 	@echo $(useR)
 
 getPackageVersion:
-	echo 'packageVersion("stockassessment");' | $(useR)
+	echo 'cat( paste( unlist( packageVersion("stockassessment") ), collapse="."));' | $(useR)
+
