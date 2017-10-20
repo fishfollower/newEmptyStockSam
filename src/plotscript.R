@@ -63,11 +63,12 @@ plots<-function(){
     plot(ypr(fit))
     stampit(fit)
     setcap("Yield per Recruit", "Yield per recruit (solid line) and spawning stock biomass plotted against different levels of fishing")
-    
-    corplot(fit)
-    setcap("Estimated correlations", "Estimates correlations between age groups for each fleet")
-    stampit(fit)
-
+   
+    if(!all(fit$conf$obsCorStruct=="ID")){ 
+      corplot(fit)			  
+      setcap("Estimated correlations", "Estimates correlations between age groups for each fleet")
+      stampit(fit)
+    }
     
     for(f in 1:fit$data$noFleets){
       fitplot(fit, fleets=f)
