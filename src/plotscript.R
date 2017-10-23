@@ -8,7 +8,9 @@ setwd("..")
 basefit<-NULL
 if(file.exists("baserun/model.RData")){
   local({load("baserun/model.RData"); basefit<<-fit})
-  if(abs(logLik(basefit)-logLik(fit))<1.0e-9)basefit<<-NULL
+  #if(abs(logLik(basefit)-logLik(fit))<1.0e-9)basefit<<-NULL
+}else{
+  basefit <- fit
 }
 
 
@@ -29,31 +31,31 @@ plots<-function(){
   par(cex.lab=1, cex.axis=1, mar=c(5,5,1,1))
     
   if(exists("fit")){
-    fits <- c(fit,basefit)
+    fits <- c(base=basefit,current=fit)
     
     ssbplot(fits, addCI=TRUE)
     stampit(fit)
     setcap("Spawning stock biomass", "Spawning stock biomass. 
             Estimates from the current run and point wise 95% confidence 
-            intervals are shown by black line and shaded area.")
+            intervals are shown by line and shaded area.")
     
     fbarplot(fits, addCI=TRUE)
     stampit(fit)
     setcap("Average fishing mortality", "Average fishing mortality for the shown age range. 
             Estimates from the current run and point wise 95% confidence 
-            intervals are shown by black line and shaded area.")
+            intervals are shown by line and shaded area.")
 
     recplot(fits, addCI=TRUE, las=0)
     stampit(fit)
     setcap("Recruitment", "Yearly resruitment. 
         Estimates from the current run and point wise 95% confidence 
-        intervals are shown by black line and shaded area.")
+        intervals are shown by line and shaded area.")
 
     catchplot(fits, addCI=TRUE)
     stampit(fit)
     setcap("Catch", "Total catch in weight. 
         Prediction from the current run and point wise 95% confidence 
-        intervals are shown by black line and shaded area. The yearly
+        intervals are shown by line and shaded area. The yearly
         observed total catch weight (crosses) are calculated as Cy=sum(WayCay).")
 
     srplot(fit)
