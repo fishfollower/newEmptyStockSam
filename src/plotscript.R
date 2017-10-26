@@ -13,6 +13,17 @@ if(file.exists("baserun/model.RData")){
   basefit <- fit
 }
 
+#exfitname <- scan("conf/viewextra.cfg", what="", comment.char="#", quiet=TRUE)
+#exfit <- lapply(exfitname, function(nam){
+#                             fn <- paste0("../../user3/",as.character(extra$V1),"/run/model.RData");
+#                             if(file.exists(fn)){
+#                               local({load(fn); xfit<<-fit});
+#                               xfit
+#                             }else{
+#                               warning("Currently it is not possible to compare to old ADMB runs automatically")
+#                             }
+#               )
+
 
 plotcounter<-1
 tit.list<-list()

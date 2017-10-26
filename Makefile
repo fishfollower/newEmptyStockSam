@@ -8,12 +8,15 @@ LD = log
 plotit = echo 'source("$(SD)/plotscript.R")' | $(useR) 1> $(LD)/plot.out 2> $(LD)/plot.err; touch $(RD)/plotOK
 datafiles := $(wildcard $(DD)/*.dat)
 sourcefiles := $(wildcard $(SD)/*)
+#desfile := $(shell $(useR) RHOME)/library/stockassessment/DESCRIPTION   ## faster, but less general
+desfile := $(shell echo 'cat(.libPaths()[1])' | $(useR))/stockassessment/DESCRIPTION
+
 BASE = baserun
 
 .PHONY = data model plot sim leaveout retro forecast updatabase button
 
 data: $(BD)/data.RData  
-$(BD)/data.RData: $(SD)/datascript.R $(datafiles) 
+$(BD)/data.RData: $(SD)/datascript.R $(datafiles) $(desfile)
 	echo 'source("$(SD)/datascript.R")' | $(useR) 1> $(LD)/data.out 2> $(LD)/data.err
 
 defcon: $(CF)/model.cfg 
@@ -78,4 +81,3 @@ getR:
 
 getPackageVersion:
 	echo 'cat( paste( unlist( packageVersion("stockassessment") ), collapse="."));' | $(useR)
-
