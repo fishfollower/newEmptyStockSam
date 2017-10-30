@@ -30,7 +30,7 @@ $(BD)/model.RData: $(SD)/model.R $(BD)/data.RData $(CF)/model.cfg
 	rm -f $(BD)/leaveout.RData $(BD)/retro.RData $(BD)/forecast.RData $(BD)/residuals.RData
 
 plot: $(RD)/plotOK
-$(RD)/plotOK: $(BD)/model.RData $(SD)/plotscript.R 
+$(RD)/plotOK: $(BD)/model.RData $(SD)/plotscript.R $(CF)/viewextra.cfg
 	$(plotit)
 
 sim: $(BD)/residuals.RData
