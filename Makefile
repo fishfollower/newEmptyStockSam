@@ -81,4 +81,4 @@ getR:
 	@echo $(useR)
 
 getPackageVersion:
-	echo 'cat( paste( unlist( packageVersion("stockassessment") ), collapse="."));' | $(useR)
+	echo 'pd<-packageDescription("stockassessment"); cat(pd$$Version,"\n"); cat( substr( pd$$GithubSHA1, 1, 12) ) ;' | $(useR)
