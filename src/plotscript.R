@@ -8,22 +8,24 @@ setwd("..")
 basefit<-NULL
 if(file.exists("baserun/model.RData")){
   local({load("baserun/model.RData"); basefit<<-fit})
-  #if(abs(logLik(basefit)-logLik(fit))<1.0e-9)basefit<<-NULL
 }else{
   basefit <- fit
 }
+fits <- c(base=basefit,current=fit)
 
-#exfitname <- scan("conf/viewextra.cfg", what="", comment.char="#", quiet=TRUE)
-#exfit <- lapply(exfitname, function(nam){
-#                             fn <- paste0("../../user3/",as.character(extra$V1),"/run/model.RData");
-#                             if(file.exists(fn)){
-#                               local({load(fn); xfit<<-fit});
-#                               xfit
-#                             }else{
-#                               warning("Currently it is not possible to compare to old ADMB runs automatically")
-#                             }
-#               )
-
+exfitname <- scan("conf/viewextra.cfg", what="", comment.char="#", quiet=TRUE)
+for(nam in exfitname){
+  local({
+    fit<-urlLoadFit(paste0("https://www.stockassessment.org/datadisk/stockassessment/userdirs/user3/",nam,"/run/model.RData"))
+    if(!is.null(fit)){
+      i <- length(fits)
+      fits[[i+1]] <<- fit
+      names(fits)[i+1] <<- nam
+    }else{
+      warning(paste0("View extra stock ", nam, " not found or of incompatible format (skipped)"))
+    }
+  })
+}
 
 plotcounter<-1
 tit.list<-list()
@@ -41,9 +43,7 @@ setcap<-function(title="", caption=""){
 plots<-function(){
   par(cex.lab=1, cex.axis=1, mar=c(5,5,1,1))
     
-  if(exists("fit")){
-    fits <- c(base=basefit,current=fit)
-    
+  if(exists("fits")){
     ssbplot(fits, addCI=TRUE)
     stampit(fit)
     setcap("Spawning stock biomass", "Spawning stock biomass. 

@@ -103,3 +103,14 @@ setcap<-function(title="", caption=""){
  tit.list[length(tit.list)+1]<<-paste(caption)
  plotcounter<<-plotcounter+1 
 }
+
+urlLoadFit <- function(address){
+  tryCatch({
+    con <- url(address)
+    suppressWarnings(load(con))
+    close(con)
+    fit
+  }, error = function(err) {
+     }
+  )
+}
