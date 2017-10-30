@@ -1,4 +1,5 @@
-useR = Rnewest --vanilla --slave
+whichR = $(shell if [ -e /usr/bin/Rnewest ]; then echo "Rnewest"; else echo "R"; fi;)
+useR = $(whichR) --vanilla --slave
 BD = run
 RD = res
 SD = src
