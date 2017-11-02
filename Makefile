@@ -3,9 +3,9 @@ whichR = $(shell if [ -e /usr/bin/Rnewest ]; then echo "Rnewest"; else echo "R";
 myRlib :=  $(shell if [ -f ~/.Renviron ]; then . ~/.Renviron; R_LIBS=.:$$R_LIBS; else R_LIBS=.; fi; echo $$R_LIBS)
 useR = R_LIBS=$(myRlib) $(whichR) --vanilla --slave --no-environ
 
-fixedSHA := 
-dummy := $(shell echo 'if(length(grep("^$(fixedSHA)",packageDescription("stockassessment")$$RemoteSha))!=1){\
-                         devtools::install_github("fishfollower/SAM/stockassessment", ref="$(fixedSHA)")}' | $(useR))
+#fixedSHA := 
+#dummy := $(shell echo 'if(length(grep("^$(fixedSHA)",packageDescription("stockassessment")$$RemoteSha))!=1){\
+#                         devtools::install_github("fishfollower/SAM/stockassessment", ref="$(fixedSHA)")}' | $(useR))
 
 BD = run
 RD = res
