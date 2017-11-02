@@ -1,5 +1,12 @@
 whichR = $(shell if [ -e /usr/bin/Rnewest ]; then echo "Rnewest"; else echo "R"; fi;)
-useR = $(whichR) --vanilla --slave
+
+myRlib :=  $(shell if [ -f ~/.Renviron ]; then . ~/.Renviron; R_LIBS=.:$$R_LIBS; else R_LIBS=.; fi; echo $$R_LIBS)
+useR = R_LIBS=$(myRlib) $(whichR) --vanilla --slave --no-environ
+
+fixedSHA := 
+dummy := $(shell echo 'if(length(grep("^$(fixedSHA)",packageDescription("stockassessment")$$RemoteSha))!=1){\
+                         devtools::install_github("fishfollower/SAM/stockassessment", ref="$(fixedSHA)")}' | $(useR))
+
 BD = run
 RD = res
 SD = src
@@ -10,11 +17,12 @@ plotit = echo 'source("$(SD)/plotscript.R")' | $(useR) 1> $(LD)/plot.out 2> $(LD
 datafiles := $(wildcard $(DD)/*.dat)
 sourcefiles := $(wildcard $(SD)/*)
 #desfile := $(shell $(useR) RHOME)/library/stockassessment/DESCRIPTION   ## faster, but less general
-desfile := $(shell echo 'cat(.libPaths()[1])' | $(useR))/stockassessment/DESCRIPTION
+desfile = $(shell echo 'cat(attr(packageDescription("stockassessment"), "file"))' | $(useR))
 
 BASE = baserun
 
-.PHONY = data model plot sim leaveout retro forecast updatabase button
+.PHONY = data model plot sim leaveout retro forecast updatabase button testtest
+
 
 data: $(BD)/data.RData  
 $(BD)/data.RData: $(SD)/datascript.R $(datafiles) $(desfile)
@@ -82,3 +90,8 @@ getR:
 
 getPackageVersion:
 	echo 'pd<-packageDescription("stockassessment"); cat(pd$$Version,"\n"); cat( substr( pd$$GithubSHA1, 1, 12) ) ;' | $(useR)
+
+testtest:
+	echo $(myRlib)
+	echo '.libPaths(); packageDescription("stockassessment")' | $(useR)
+	echo $(desfile)
