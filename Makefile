@@ -21,8 +21,7 @@ desfile = $(shell echo 'cat(attr(packageDescription("stockassessment"), "file"))
 
 BASE = baserun
 
-.PHONY = data model plot sim leaveout retro forecast updatabase button testtest
-
+.PHONY = data model plot sim leaveout retro forecast updatabase button
 
 data: $(BD)/data.RData  
 $(BD)/data.RData: $(SD)/datascript.R $(datafiles) $(desfile)
@@ -90,8 +89,3 @@ getR:
 
 getPackageVersion:
 	echo 'pd<-packageDescription("stockassessment"); cat(pd$$Version,"\n"); cat( substr( pd$$GithubSHA1, 1, 12) ) ;' | $(useR)
-
-testtest:
-	echo $(myRlib)
-	echo '.libPaths(); packageDescription("stockassessment")' | $(useR)
-	echo $(desfile)
