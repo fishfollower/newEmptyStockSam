@@ -16,8 +16,8 @@ LD = log
 plotit = echo 'source("$(SD)/plotscript.R")' | $(useR) 1> $(LD)/plot.out 2> $(LD)/plot.err; touch $(RD)/plotOK
 datafiles := $(wildcard $(DD)/*.dat)
 sourcefiles := $(wildcard $(SD)/*)
-#desfile := $(shell $(useR) RHOME)/library/stockassessment/DESCRIPTION   ## faster, but less general
-desfile = $(shell echo 'cat(attr(packageDescription("stockassessment"), "file"))' | $(useR))
+desfile := $(shell $(useR) RHOME)/library/stockassessment/DESCRIPTION   ## faster, but less general
+#desfile = $(shell echo 'cat(attr(packageDescription("stockassessment"), "file"))' | $(useR))
 
 BASE = baserun
 
