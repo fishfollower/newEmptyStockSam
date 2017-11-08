@@ -1,11 +1,7 @@
 whichR = $(shell if [ -e /usr/bin/Rnewest ]; then echo "Rnewest"; else echo "R"; fi;)
 
 myRlib :=  $(shell if [ -f ~/.Renviron ]; then . ~/.Renviron; R_LIBS=.:$$R_LIBS; else R_LIBS=.; fi; echo $$R_LIBS)
-useR = R_LIBS=$(myRlib) $(whichR) --vanilla --slave --no-environ
-
-#fixedSHA := 
-#dummy := $(shell echo 'if(length(grep("^$(fixedSHA)",packageDescription("stockassessment")$$RemoteSha))!=1){\
-#                         devtools::install_github("fishfollower/SAM/stockassessment", ref="$(fixedSHA)")}' | $(useR))
+useR = R_LIBS=$(myRlib) $(whichR) --slave --no-environ
 
 BD = run
 RD = res
@@ -16,15 +12,24 @@ LD = log
 plotit = echo 'source("$(SD)/plotscript.R")' | $(useR) 1> $(LD)/plot.out 2> $(LD)/plot.err; touch $(RD)/plotOK
 datafiles := $(wildcard $(DD)/*.dat)
 sourcefiles := $(wildcard $(SD)/*)
-desfile := $(shell $(useR) RHOME)/library/stockassessment/DESCRIPTION   ## faster, but less general
-#desfile = $(shell echo 'cat(attr(packageDescription("stockassessment"), "file"))' | $(useR))
+desfile = $(shell if [ -f $(BD)/curver ]; then tail -1 $(BD)/curver; fi; )
 
 BASE = baserun
 
 .PHONY = data model plot sim leaveout retro forecast updatabase button
 
+$(BD)/curver: $(CF)/locked.ver 
+	echo "x<-read.table('conf/locked.ver', col.names=c('pkg','sha'));\
+	      if(nrow(x)>0){\
+	        for(i in 1:nrow(x))devtools::install_github(x[i,1], ref=x[i,2]);\
+	      };\
+	      pd<-packageDescription('stockassessment');\
+	      cat('Version:', pd[['Version']], '\n', file='$(BD)/curver');\
+	      cat('RemoteSha:', substr(pd[['RemoteSha']],1,12), '\n', file='$(BD)/curver', append=TRUE);\
+	      cat(attr(packageDescription('stockassessment'), 'file'), '\n', file='$(BD)/curver', append=TRUE)" | $(useR)
+
 data: $(BD)/data.RData  
-$(BD)/data.RData: $(SD)/datascript.R $(datafiles) $(desfile)
+$(BD)/data.RData: $(SD)/datascript.R $(datafiles) $(BD)/curver $(desfile) 
 	echo 'source("$(SD)/datascript.R")' | $(useR) 1> $(LD)/data.out 2> $(LD)/data.err
 
 defcon: $(CF)/model.cfg 
@@ -35,6 +40,10 @@ model: $(BD)/model.RData
 $(BD)/model.RData: $(SD)/model.R $(BD)/data.RData $(CF)/model.cfg 
 	echo 'source("$(SD)/model.R")' | $(useR) 1> $(LD)/model.out 2> $(LD)/model.err
 	rm -f $(BD)/leaveout.RData $(BD)/retro.RData $(BD)/forecast.RData $(BD)/residuals.RData
+	echo "pd<-packageDescription('stockassessment');\
+	      cat('Version:', pd[['Version']], '\n', file='$(BD)/ver');\
+	      cat('RemoteSha:', substr(pd[['RemoteSha']],1,12), '\n', file='$(BD)/ver', append=TRUE)" | $(useR)
+
 
 plot: $(RD)/plotOK
 $(RD)/plotOK: $(BD)/model.RData $(SD)/plotscript.R $(CF)/viewextra.cfg
@@ -87,5 +96,5 @@ doclink:
 getR: 
 	@echo $(useR)
 
-getPackageVersion:
-	echo 'pd<-packageDescription("stockassessment"); cat(pd$$Version,"\n"); cat( substr( pd$$GithubSHA1, 1, 12) ) ;' | $(useR)
+getPackageVersion: $(BD)/curver
+	@head -2 $(BD)/curver
