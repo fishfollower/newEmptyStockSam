@@ -97,4 +97,5 @@ getR:
 	@echo $(useR)
 
 getPackageVersion: $(BD)/curver
-	@head -2 $(BD)/curver
+	@head -2 $(BD)/curver | sed s/Version://g | sed s/RemoteSha://g
+
