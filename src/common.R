@@ -105,6 +105,11 @@ setcap<-function(title="", caption=""){
 }
 
 urlLoadFit <- function(address){
+  fnam <- gsub("https://www.stockassessment.org","",address)
+  if( file.exists( fnam )){
+      suppressWarnings(load(fnam))
+      return(fit)
+  }
   tryCatch({
     con <- url(address)
     suppressWarnings(load(con))
