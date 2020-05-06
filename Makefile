@@ -21,7 +21,7 @@ BASE = baserun
 $(BD)/curver: $(CF)/locked.ver 
 	echo "x<-read.table('conf/locked.ver', col.names=c('pkg','sha'));\
 	      if(nrow(x)>0){\
-	        for(i in 1:nrow(x))devtools::install_github(x[i,1], ref=x[i,2]);\
+	        for(i in 1:nrow(x))remotes::install_github(x[i,1], ref=as.character(x[i,2]));\
 	      };\
 	      pd<-packageDescription('stockassessment');\
 	      cat('Version:', pd[['Version']], '\n', file='$(BD)/curver');\
