@@ -157,7 +157,12 @@ plots<-function(){
   } 
   if(exists("FC")){  
     lapply(FC, function(f){plot(f); title(attr(f,"label"), outer=TRUE, line=-1); stampit(fit)})
-  }  
+  }
+
+  if(exists("RP")){
+      for(i in 1:5)
+          plot(RP, show = i, ask = FALSE); stampit(fit)
+  }
   
 }
 
