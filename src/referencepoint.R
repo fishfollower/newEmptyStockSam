@@ -8,4 +8,4 @@ load("run/model.RData")
 ## SPRpercent = c(0.35), use 35% for F[x%] reference point
 ## catchType = "catch", use catch to calculate yield
 RP <- referencepoints(fit)
-save(FC, file="run/referencepoint.RData")
+save(RP, file="run/referencepoint.RData")
