@@ -70,6 +70,8 @@ plots<-function(){
         observed total catch weight (crosses) are calculated as Cy=sum(WayCay).")
 
     srplot(fit)
+    if(fit$conf$stockRecruitmentModelCode != 0)
+      addRecruitmentCurve(fit)
     stampit(fit)
     setcap("Spawner-resruits", "Estimated recruitment as a function of spawning stock biomass.")
 
