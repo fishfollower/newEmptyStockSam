@@ -1,5 +1,4 @@
-whichR = R-4-0-3
-#$(shell if [ -e /usr/bin/Rnewest ]; then echo "Rnewest"; else echo "R"; fi;)
+whichR = $(shell if [ -e /usr/bin/Rnewest ]; then echo "Rnewest"; else echo "R"; fi;)
 
 myRlib :=  $(shell if [ -f ~/.Renviron ]; then . ~/.Renviron; R_LIBS=.:$$R_LIBS; else R_LIBS=.; fi; echo $$R_LIBS)
 useR = R_LIBS=$(myRlib) $(whichR) --slave --no-environ
