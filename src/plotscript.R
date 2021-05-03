@@ -252,7 +252,7 @@ if(exists("RP")){
         ii<<-ii+1;
         dec<-c(3,3,3,rep(0,ncol(tf)-3));
         if(!all(is.na(tf)))
-            xtab(tf, caption=paste0('Reference point table ',ii,'. ', pnm[ii],'.'), 
+            xtab(tf, caption=paste0('Reference point table ',ii,'. ', gsub("Per"," Per ",pnm[ii]),'.'), 
                  cornername='Reference point', file=paste(stamp,'_tabRP',ii,'.html',sep=''), dec=dec);  
   })
 }
