@@ -7,5 +7,11 @@ load("run/model.RData")
 ## selYears = max(fit$data$years), use selectivity in the final year
 ## SPRpercent = c(0.35), use 35% for F[x%] reference point
 ## catchType = "catch", use catch to calculate yield
-RP <- referencepoints(fit)
+ymax <- max(fit$data$years)
+ymin <- pmax(fit$data$years, ymax - 14)
+RP <- referencepoints(fit,                     
+                      Fsequence = seq(0, 2, len = 200), 
+                      aveYears = ymin:ymax,
+                      selYears = ymin:ymax,
+                      catchType = "landing")
 save(RP, file="run/referencepoint.RData")
