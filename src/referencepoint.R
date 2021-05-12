@@ -8,7 +8,7 @@ load("run/model.RData")
 ## SPRpercent = c(0.35), use 35% for F[x%] reference point
 ## catchType = "catch", use catch to calculate yield
 ymax <- max(fit$data$years)
-ymin <- pmax(fit$data$years, ymax - 14)
+ymin <- pmax(min(fit$data$years), ymax - 14)
 RP <- referencepoints(fit,                     
                       Fsequence = seq(0, 2, len = 200), 
                       aveYears = ymin:ymax,
