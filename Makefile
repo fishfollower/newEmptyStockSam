@@ -16,7 +16,7 @@ desfile = $(shell if [ -f $(BD)/curver ]; then tail -1 $(BD)/curver; fi; )
 
 BASE = baserun
 
-.PHONY = data model plot sim leaveout retro forecast updatabase button
+.PHONY = data model plot sim leaveout retro forecast referencepoint updatabase button
 
 $(BD)/curver: $(CF)/locked.ver 
 	echo "x<-read.table('conf/locked.ver', col.names=c('pkg','sha'));\
@@ -39,7 +39,7 @@ $(CF)/model.cfg: $(BD)/data.RData
 model: $(BD)/model.RData
 $(BD)/model.RData: $(SD)/model.R $(BD)/data.RData $(CF)/model.cfg 
 	echo 'source("$(SD)/model.R")' | $(useR) 1> $(LD)/model.out 2> $(LD)/model.err
-	rm -f $(BD)/leaveout.RData $(BD)/retro.RData $(BD)/forecast.RData $(BD)/residuals.RData
+	rm -f $(BD)/leaveout.RData $(BD)/retro.RData $(BD)/forecast.RData $(BD)/referencepoint.RData $(BD)/residuals.RData
 	echo "pd<-packageDescription('stockassessment');\
 	      cat('Version:', pd[['Version']], '\n', file='$(BD)/ver');\
 	      cat('RemoteSha:', substr(pd[['RemoteSha']],1,12), '\n', file='$(BD)/ver', append=TRUE)" | $(useR)
@@ -69,6 +69,11 @@ $(BD)/forecast.RData: $(BD)/model.RData $(SD)/forecast.R
 	echo 'source("$(SD)/forecast.R")' | $(useR) 1> $(LD)/model.out 2> $(LD)/model.err
 	$(plotit)
 
+referencepoint: $(BD)/referencepoint.RData
+$(BD)/referencepoint.RData: $(BD)/model.RData $(SD)/referencepoint.R
+	echo 'source("$(SD)/referencepoint.R")' | $(useR) 1> $(LD)/model.out 2> $(LD)/model.err
+	$(plotit)
+
 updatebase: $(BASE)/model.RData
 $(BASE)/model.RData: $(BD)/model.RData
 	rm -f $(BASE)/*
@@ -88,6 +93,7 @@ button:
 	@echo Add leave-one-out runs\; leaveout\; Add leave-one-out runs based on the current model 
 	@echo Add retro runs\; retro\; Add retrospective runs based on the current model 
 	@echo Add forecasts\; forecast\; Add forecast runs to the output
+	@echo Add referencepoints\; referencepoint\; Add referencepoints to the output
 	@echo Add residuals\; sim\; Add prediction and single joint sample residuals 
 
 doclink: 

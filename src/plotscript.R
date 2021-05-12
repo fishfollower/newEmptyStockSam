@@ -70,6 +70,8 @@ plots<-function(){
         observed total catch weight (crosses) are calculated as Cy=sum(WayCay).")
 
     srplot(fit)
+    if(fit$conf$stockRecruitmentModelCode != 0)
+      addRecruitmentCurve(fit)
     stampit(fit)
     setcap("Spawner-resruits", "Estimated recruitment as a function of spawning stock biomass.")
 
@@ -157,7 +159,15 @@ plots<-function(){
   } 
   if(exists("FC")){  
     lapply(FC, function(f){plot(f); title(attr(f,"label"), outer=TRUE, line=-1); stampit(fit)})
-  }  
+  }
+
+  if(exists("RP")){
+      pnm <- c("YieldPerRecruit", "SpawnersPerRecruit", "Yield", "Biomass", "Recruitment")
+      pnm <- pnm[sapply(pnm, function(nn) !all(is.na(RP$graphs[[nn]])))]
+      for(i in pnm){
+          try({plot(RP, show = i, ask = FALSE); stampit(fit)})
+      }
+  }
   
 }
 
@@ -228,13 +238,26 @@ xtab(sdtab, caption=paste('Table 6. Table of selected sd','.',sep=''), cornernam
 if(exists("FC")){  
     ii<-0
     lapply(FC, function(f){
-       ii<<-ii+1;
-       tf<-attr(f,"tab");
-       dec<-c(3,3,3,rep(0,ncol(tf)-3));
-       xtab(tf, caption=paste0('Forecast table ',ii,'. ', attr(f,"label"),'.'), 
-       cornername='Year', file=paste(stamp,'_tabX',ii,'.html',sep=''), dec=dec);      
-       })
-}  
+        ii<<-ii+1;
+        tf<-attr(f,"tab");
+        dec<-c(3,3,3,rep(0,ncol(tf)-3));
+        xtab(tf, caption=paste0('Forecast table ',ii,'. ', attr(f,"label"),'.'), 
+             cornername='Year', file=paste(stamp,'_tabX',ii,'.html',sep=''), dec=dec);      
+    })
+}
+
+if(exists("RP")){
+    ii <- 0
+    pnm <- c("YieldPerRecruit", "SpawnersPerRecruit", "Yield", "Biomass", "Recruitment")
+    pnm <- pnm[sapply(pnm, function(nn) !all(is.na(RP$graphs[[nn]])))]
+    lapply(RP$tables[pnm], function(tf){
+        ii<<-ii+1;
+        dec<-c(3,3,3,rep(0,ncol(tf)-3));
+        if(!all(is.na(tf)))
+            xtab(tf, caption=paste0('Reference point table ',ii,'. ', gsub("Per"," Per ",pnm[ii]),'.'), 
+                 cornername='Reference point', file=paste(stamp,'_tabRP',ii,'.html',sep=''), dec=dec);  
+  })
+}
 
 setwd("..") 
 
