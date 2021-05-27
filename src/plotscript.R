@@ -248,7 +248,7 @@ if(exists("FC")){
 
 if(exists("RP")){
     ii <- 0
-    pnm <- c("YieldPerRecruit", "SpawnersPerRecruit", "Yield", "Biomass", "Recruitment")
+    pnm <- c("F","YieldPerRecruit", "SpawnersPerRecruit", "Yield", "Biomass", "Recruitment")
     pnm <- pnm[sapply(pnm, function(nn) !all(is.na(RP$graphs[[nn]])))]
     lapply(RP$tables[pnm], function(tf){
         ii<<-ii+1;
